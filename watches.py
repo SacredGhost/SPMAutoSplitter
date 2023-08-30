@@ -302,9 +302,3 @@ watches = {
         "datatype": Datatype.STRING
     }
 }
-# 807B2F26
-class GSWFMemoryWatch(BitFieldMemoryWatch):
-    GSWF_BASE_ADDRESS = get_address("GSWF_base_address")
-    def __init__(self, gswf_id:int) -> None:
-        q,r = divmod(gswf_id, 32)
-        super().__init__(GSWFMemoryWatch.GSWF_BASE_ADDRESS + q*4, Datatype.WORD, 1 << r)
