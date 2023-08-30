@@ -11,7 +11,7 @@ If your key is not on this list and would like it added, please let me know or i
 
 ### Credits
 SeekyCt - For all of the reverse engineering of SPM, helping this process greatly <br />
-JohnP55 - Creating read and rrite functions for DME, and general code optimization <br />
+JohnP55 - Creating read and write functions for DME and general code optimization <br />
 NmFlash8 - NmFlash8
 
 ### To Do
