@@ -18,8 +18,9 @@ JohnP55 - Creating read and write functions for DME and general code optimizatio
 NmFlash8 - NmFlash8
 
 ### To Do
-Add options to change when to split (CastleSR timing, etc)
-Add options to change extra splits are active (6-1 -> 6-2 -> 6-? instead of 6-1 -> 6-?)
+Add options to change when to split (CastleSR timing, etc) <br />
+Add options to change extra splits are active (6-1 -> 6-2 -> 6-? instead of 6-1 -> 6-?) <br />
+Add 100% speedrun type splits. <br />
 Add Return Pipe and Enter Pipe functions for Pit% and Deafeat Shadoo. <br />
 Add 100% speedrun type splits. <br />
 Console Support (Wii U)
