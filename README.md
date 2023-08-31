@@ -8,8 +8,7 @@ Current only splits for Any%
 ### How to use
 Simply launch Super Paper Mario on Dolphin, and open AutoSplitter.exe <br />
 <br />
-To change your hotkey split to match your LiveSplit, open hotkeys.config and change the key to one of the provided key bindings. <br />
-Make sure in your LiveSplit settings or on other timers, to have global hotkeys enabled. <br />
+To change your hotkey split to match your LiveSplit, open hotkeys.config and change the key to one of the provided key bindings. Make sure in your LiveSplit settings or on other timers, to have global hotkeys enabled. <br />
 <br />
 If your key is not on this list and you would like it added, please let me know or input a github issue.
 
