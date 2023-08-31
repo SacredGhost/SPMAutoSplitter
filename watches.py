@@ -119,10 +119,10 @@ if not dme.is_hooked():
     while not dme.is_hooked():
         time.sleep(0.01)
         dme.hook()
-    print(f'{"[" + "Console" + "]":>15} Hooked')
+    print(f'{"[" + "Console" + "]":>15} Hooked... waiting for AutoSplitter...')
     time.sleep(5) # Added a wait as it cannot read the addresses when dophin is still booting the game
 else:
-    print(f'{"[" + "Console" + "]":>15} Hooked')
+    print(f'{"[" + "Console" + "]":>15} Hooked... waiting for AutoSplitter...')
     time.sleep(5)
 
 game_region = chr(dme.read_byte(0x80000003))
@@ -300,5 +300,24 @@ watches = {
             "K": [0x8055CEF4]
         },
         "datatype": Datatype.STRING
+    },
+    "buttonsHeld" : {
+        "addresses" : {
+            "E": [0x804e5fb4, 0x804e7834, 0x804e79b4],
+            "P": [0x80528fb4, 0x80528fb4],
+            "J": [0x804bb2b4, 0x804bc8b4],
+            "K": [0x80560914]
+        },
+        "datatype": Datatype.WORD
+    },
+    "seqLoadWork_state" : {
+        "addresses" : {
+            "E": [0x804d05a4, 0x804d1e24, 0x804d1fa4],
+            "P": [0x805135a4, 0x805135a4],
+            "J": [0x804a58a4, 0x804a6ea4],
+            "K": [0x8054ae8c]
+        },
+        "datatype": Datatype.WORD
     }
 }
+

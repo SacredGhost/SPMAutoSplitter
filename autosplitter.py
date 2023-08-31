@@ -8,21 +8,26 @@ config = configparser.ConfigParser()
 config.read('hotkeys.config')
 key_code = config['SplitKey']['keyCode']
 
+print(f'{"[" + "Console" + "]":>15} SPM Auto Splitter [vBeta1]')
+
 def do_split(delay):
     current_framecount = frame_count.read()
     while frame_count.read() < current_framecount + delay:
         time.sleep(1 / FPS)
     PressRelease(keyCodeMap[key_code], 100)
-    frame_wait(ONESECOND_DELAY * 5)
+    msec_wait(5000)
 
 def frame_wait(delay):
     current_framecount = frame_count.read()
     while frame_count.read() < current_framecount + delay:
         time.sleep(1 / FPS)
 
+def msec_wait(delay):
+    frame_wait(delay / 1000 * FPS)
+
 
 FPS = get_watch("fps").read()
-SLEEP_TIME = 5 # Default: 5 seconds
+SLEEP_TIME = 5 # DO NOT CHANGE
 STAR_BLOCK_SPLIT_DELAY = 240 # Default: 240 frames
 PURE_HEART_SPLIT_DELAY = 727 # Default: 727 frames
 ROCK_HEART_SPLIT_DELAY = 721 # Default: 721 frames
@@ -31,9 +36,12 @@ CB_DOOR_CLOSE_SPLIT_DELAY = 84 # Default: 84 frames
 RETURN_SPLIT_DELAY = 426 # Default: 426 frames
 CB_DEFEAT_DELAY = 150 # Default: 150 frames
 SD_DEFEAT_DELAY = 40 # Default: 40 frames
-CREDITS_DELAY = 0 # DO NOT CHANGE
-ONESECOND_DELAY = 60 # DO NOT CHANGE
+START_OR_CREDITS_DELAY = 0 # DO NOT CHANGE
 SPLIT_MAPS = ("mac_02", "mac_12", "ls4_10")
+BTN_MASK_2 = 0x100
+BTN_MASK_DOWN = 0x1
+BTN_MASK_UP = 0x2
+BTN_MASK_HOME = 0x8000
 
 EVT_ENTRY_SIZE = 0x1a8
 EVT_ENTRY_SCRIPT_PTR_OFFSET = 0x198
@@ -55,15 +63,21 @@ map = get_watch("CurrentMap")
 effcurcount = get_watch("EffTypeStats_curCount")
 textopacity1 = get_watch("text_opacity_1")
 textopacity2 = get_watch("text_opacity_2")
+buttonsHeld = get_watch("buttonsHeld")
+seqLoadWork_state = get_watch('seqLoadWork_state')
 
 text_box_count1 = 0
 text_box_count2 = 0
+fileError = False
+filestart = True
 
+current_framecount = frame_count.read()
 current_map = map.read()
 current_sequence = sequence_position.read()
 current_effcurcount = effcurcount.read()
 current_text_opacity_1 = textopacity1.read()
 current_text_opacity_2 = textopacity2.read()
+current_loadSeq = seqLoadWork_state.read()
 
 def findInStructArray(arr: ByteArrayMemoryWatch, struct_size: int, offset: int, to_find: list[int], to_find_datatype: Datatype, callback: Callable[[int], Any]):
     for i in range(arr.size // struct_size):
@@ -81,6 +95,8 @@ def evt_entry_cb(script_ptr: int):
     global current_text_opacity_2
     global text_box_count1
     global text_box_count2
+    global current_loadSeq
+    global current_framecount
 
     if script_ptr == STAR_BLOCK_EVT_SCRIPT:
         print(f'{"[" + "Console" + "]":>15} Detected Star Block Hit')
@@ -126,12 +142,12 @@ def evt_entry_cb(script_ptr: int):
             valid_door = False
         
         if (valid_door):
-            print(f'{"[" + "Console" + "]":>15} Valid Door: Chapter {door_name} Door Detected')
+            print(f'{"[" + "Console" + "]":>15} Valid Door: {door_name} Door Detected')
             do_split(split_delay)
 
     if script_ptr == CB_DEFEAT_EVT_SCRIPT:
         print(f'{"[" + "Console" + "]":>15} Count Bleck Defeated')
-        frame_wait(ONESECOND_DELAY *2)
+        frame_wait(FPS *2)
         while current_effcurcount != 1:
             time.sleep(0.01)
             current_effcurcount = effcurcount.read()
@@ -144,7 +160,7 @@ def evt_entry_cb(script_ptr: int):
     if script_ptr == CREDITS_START_SCRIPT:
         if current_map == "mac_22":
             print(f'{"[" + "Console" + "]":>15} Credits Detected')
-            frame_wait(ONESECOND_DELAY *2)
+            frame_wait(FPS *2)
             current_text_opacity_1 = textopacity1.read()
             current_text_opacity_2 = textopacity2.read()
             while current_text_opacity_1 != 255 and current_text_opacity_2 != 255:
@@ -165,18 +181,73 @@ def evt_entry_cb(script_ptr: int):
                         while current_text_opacity > 0:
                             current_text_opacity = textopacity.read()
                             pass
-                    frame_wait(ONESECOND_DELAY *2)
+                    frame_wait(FPS * 2)
                     current_text_opacity = textopacity.read()
                     text_box_count += 1
                 while current_text_opacity != 0:
                     current_text_opacity = textopacity.read()
-                do_split(CREDITS_DELAY)
+                do_split(START_OR_CREDITS_DELAY)
                 text_box_count = 0
                 print(f'{"[" + "Console" + "]":>15} GG :)')
+    
+runstarted = False
 
-print(f'{"[" + "Console" + "]":>15} Auto Splitter Ready!')
+current_loadSeq = seqLoadWork_state.read()
+while current_loadSeq > 10:
+    errormessage = False
+    print(f'{"[" + "Console" + "]":>15} Please close the current textbox.')
+    errormessage = True
+    while errormessage == True and current_loadSeq > 10:
+        current_loadSeq = seqLoadWork_state.read()
+errormessage = False
 
-found = False
+# Initial split
+while runstarted == False:
+    print(f'{"[" + "Console" + "]":>15} Auto Splitter Ready! Please select your file.')
+
+    while seqLoadWork_state.read() != 0x12d:
+        time.sleep(1 / FPS)
+    print(f'{"[" + "Console" + "]":>15} File select split detected.')
+    print(f'{"[" + "Console" + "]":>15} Please wait a moment...')
+    framewaitcount = 0
+    while framewaitcount < FPS:
+        if buttonsHeld.read() & BTN_MASK_UP != 0 or buttonsHeld.read() & BTN_MASK_DOWN != 0 or buttonsHeld.read() & BTN_MASK_HOME != 0:
+            print(f'{"[" + "Console" + "]":>15} Split canceled, please go back to file select')
+            fileError = True
+            break
+        msec_wait(1000 / FPS)
+        framewaitcount += 1
+    if fileError == False:
+        print(f'{"[" + "Console" + "]":>15} Ready! Press 2 to begin your run.')
+        filestart = True
+        while buttonsHeld.read() & BTN_MASK_2 == 0:
+            while buttonsHeld.read() & BTN_MASK_UP != 0 or buttonsHeld.read() & BTN_MASK_DOWN != 0 or buttonsHeld.read() & BTN_MASK_HOME != 0:
+                if errormessage == False:
+                    print(f'{"[" + "Console" + "]":>15} Split canceled, please go back to file select')
+                errormessage = True
+                filestart = False
+                break
+            time.sleep(1 / FPS)
+    if filestart == True and fileError == False:
+        PressRelease(keyCodeMap[key_code], 100)
+        print(f'{"[" + "Console" + "]":>15} Good Luck!')
+        time.sleep(10)
+        runstarted = True
+        errormessage = False
+    else:
+        errormessage = False
+        fileError = False
+        current_loadSeq = seqLoadWork_state.read()
+        while current_loadSeq > 10:
+            errormessage = False
+            if framewaitcount < FPS:
+                print(f'{"[" + "Console" + "]":>15} Please close the current textbox.')
+            errormessage = True
+            while errormessage == True and current_loadSeq > 10:
+                current_loadSeq = seqLoadWork_state.read()
+        print(f'{"[" + "Console" + "]":>15} Please wait a moment...')
+        time.sleep(3)
+
 while True:
     try:
         current_map = map.read()
