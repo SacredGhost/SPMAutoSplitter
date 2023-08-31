@@ -3,7 +3,7 @@
 An external auto splitter for Dolphin Emulator speedruns of Super Paper Mario. <br />
 Supports all versions of the game, and since it's external, will support all timers that use hotkeys.
 
-Current only splits for Any%
+Currently only splits for Any%
 
 ### How to use
 Simply launch Super Paper Mario on Dolphin, and open AutoSplitter.exe <br />
@@ -22,7 +22,6 @@ Add options to change when to split (CastleSR timing, etc) <br />
 Add options to change extra splits are active (6-1 -> 6-2 -> 6-? instead of 6-1 -> 6-?) <br />
 Add 100% speedrun type splits. <br />
 Add Return Pipe and Enter Pipe functions for Pit% and Deafeat Shadoo. <br />
-Add 100% speedrun type splits. <br />
 Console Support (Wii U)
 
 ### For Developers: 
