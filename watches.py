@@ -238,6 +238,33 @@ watches = {
         },
         "datatype": Datatype.VOIDPTR
     },
+    "return_pipe_evt_script" : {
+        "addresses" : {
+            "E": [0x803c0504, 0x803c1864, 0x803c1a04],
+            "P": [0x803ffb24, 0x803ffb24],
+            "J": [0x80395784, 0x80396904],
+            "K": [0x80430644]
+        },
+        "datatype": Datatype.VOIDPTR
+    },
+    "down_pipe_evt_script" : {
+        "addresses" : {
+            "E": [0x803d3808, 0x803d4b68, 0x803d4d48],
+            "P": [0x804131b0, 0x804131b0],
+            "J": [0x803a8a88, 0x803a9c08],
+            "K": [0x804438f0]
+        },
+        "datatype": Datatype.VOIDPTR
+    },
+    "town_door_evt_script" : {
+        "addresses" : {
+            "E": [0x80ce6ce0, 0x80cd4260, 0x80cd4440],
+            "P": [0x80d16430, 0x80d16430],
+            "J": [0x80d01c00, 0x80ceef00],
+            "K": [0x80d2ff50]
+        },
+        "datatype": Datatype.VOIDPTR
+    },
     "text_opacity_1" : {
         "addresses": {
             "E": [0x80781c86, 0x807714e6, 0x80771666],
@@ -292,6 +319,15 @@ watches = {
         },
         "datatype": Datatype.FLOAT
     },
+    "Mario_Z" : {
+        "addresses" : {
+            "E": [0x804cd4bc, 0x804ced3c, 0x804ceebc],
+            "P": [0x805104bc, 0x805104bc],
+            "J": [0x804a27bc, 0x804a3dbc],
+            "K": [0x80547da0]
+        },
+        "datatype": Datatype.FLOAT
+    },
     "CurrentMap" : {
         "addresses" : {
             "E": [0x804E2594, 0x804E3E14, 0x804E3F94],
@@ -318,6 +354,24 @@ watches = {
             "K": [0x8054ae8c]
         },
         "datatype": Datatype.WORD
+    },
+    "knownRecipesByte6" : {
+        "addresses" : {
+            "E": [0x804ced49, 0x804d05c9, 0x804d0749],
+            "P": [0x80511d49, 0x80511d49],
+            "J": [0x804a4049, 0x804a5649],
+            "K": [0x80549631]
+        },
+        "datatype": Datatype.BYTE
+    },
+    "knownRecipesByte7" : {
+        "addresses" : {
+            "E": [0x804ced4a, 0x804d05ca, 0x804d074a],
+            "P": [0x80511d4a, 0x80511d4a],
+            "J": [0x804a404a, 0x804a564a],
+            "K": [0x80549632]
+        },
+        "datatype": Datatype.BYTE
     }
 }
 

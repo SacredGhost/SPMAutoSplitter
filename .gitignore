@@ -153,6 +153,7 @@ dmypy.json
 cython_debug/
 
 pyinstallercode.txt
+hundo_sequence_labels.txt
 
 
 # PyCharm
