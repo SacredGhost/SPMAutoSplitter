@@ -13,7 +13,7 @@ To change your hotkey split to match your LiveSplit, open settings.config and ch
 <br />
 If your key is not on this list and you would like it added, please let me know or input a github issue. <br />
 <br />
-You can now change if you want to split in each Pit% room
+You can also set which extra splits to use in all runs, including if you want to split in each Pit% room.
 
 ### Credits
 SeekyCt - For all of the reverse engineering of SPM, helping this process greatly <br />
