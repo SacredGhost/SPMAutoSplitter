@@ -273,18 +273,25 @@ if __name__ == "__main__":
                         hundo_sequence = 0
 
         if script_ptr == DOWN_PIPE_EVT_SCRIPT:
-            if current_map == "mac_05" or current_map in PIT_10_MAPS:
-                if sequence_position == 99:
-                    print(f'{"[" + "Console" + "]":>15} All Pixls run detected')
-                print(f'{"[" + "Console" + "]":>15} Pipe split detected')
-                do_split(DOWN_PIPE_DELAY)
-                if current_map == "dan_30" or current_map == "dan_70":
-                    if hundo_run == False:
-                        print(f'{"[" + "Console" + "]":>15} GG :)')
-                    elif hundo_sequence == 1:
-                        hundo_sequence = 2
-                    elif hundo_sequence == 2:
-                        hundo_sequence = 3
+            valid_pipe = True
+            marioposx = mariox.read()
+            if current_map == "mac_05" or current_map == "mac_15" or current_map in PIT_10_MAPS:
+                if current_map == "mac_05" and marioposx < 45:
+                    valid_pipe = False
+                if current_map == "mac_15" and marioposx > -45:
+                    valid_pipe = False
+                if valid_pipe == True:
+                    if sequence_position == 99:
+                        print(f'{"[" + "Console" + "]":>15} All Pixls run detected')
+                    print(f'{"[" + "Console" + "]":>15} Pipe split detected')
+                    do_split(DOWN_PIPE_DELAY)
+                    if current_map == "dan_30" or current_map == "dan_70":
+                        if hundo_run == False:
+                            print(f'{"[" + "Console" + "]":>15} GG :)')
+                        elif hundo_sequence == 1:
+                            hundo_sequence = 2
+                        elif hundo_sequence == 2:
+                            hundo_sequence = 3
         
         if script_ptr == RETURN_PIPE_SCRIPT:
             if current_map == "mi1_07" and current_sequence == 73:
