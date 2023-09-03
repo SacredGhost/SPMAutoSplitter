@@ -395,7 +395,7 @@ if __name__ == "__main__":
             if current_map == "ls4_11" and CountBleckSplit == True:
                 current_effcurcount = effcurcount.read()
 
-            findInStructArray(evt_entries, EVT_ENTRY_SIZE, EVT_ENTRY_SCRIPT_PTR_OFFSET, [STAR_BLOCK_EVT_SCRIPT, PURE_HEART_EVT_SCRIPT, DOOR_CLOSE_EVT_SCRIPT, RETURN_EVT_SCRIPT, CB_DEFEAT_EVT_SCRIPT, SD_DEFEAT_EVT_SCRIPT, CREDITS_START_SCRIPT, DOWN_PIPE_EVT_SCRIPT, TOWN_DOOR_EVT_SCRIPT], Datatype.WORD, evt_entry_cb)
+            findInStructArray(evt_entries, EVT_ENTRY_SIZE, EVT_ENTRY_SCRIPT_PTR_OFFSET, [STAR_BLOCK_EVT_SCRIPT, PURE_HEART_EVT_SCRIPT, DOOR_CLOSE_EVT_SCRIPT, RETURN_EVT_SCRIPT, CB_DEFEAT_EVT_SCRIPT, SD_DEFEAT_EVT_SCRIPT, CREDITS_START_SCRIPT, RETURN_PIPE_DELAY, DOWN_PIPE_EVT_SCRIPT, TOWN_DOOR_EVT_SCRIPT], Datatype.WORD, evt_entry_cb)
 
             if hundo_sequence == 6:
                 current_recipeByte6 = knownRecipe_Byte6.read()
