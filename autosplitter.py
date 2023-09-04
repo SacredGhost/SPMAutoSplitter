@@ -364,7 +364,7 @@ if __name__ == "__main__":
                     do_split(START_OR_CREDITS_DELAY)
                     hundo_sequence = 11
 
-    runstarted = True # True = debug
+    runstarted = False # True = debug
 
     if runstarted == False:
         current_loadSeq = seqLoadWork_state.read()
