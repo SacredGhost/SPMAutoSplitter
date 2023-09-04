@@ -179,7 +179,7 @@ watches = {
         "addresses": {
             "E": [0x803cf298, 0x803d05f8, 0x803d0798],
             "P": [0x8040ec00, 0x8040ec00],
-            "J": [0x803ab2c8, 0x803a5698],
+            "J": [0x803a4518, 0x803a5698], #jp0: changed from 803ab2c8
             "K": [0x8043f340]
         },
         "datatype": Datatype.VOIDPTR
@@ -188,7 +188,7 @@ watches = {
         "addresses": {
             "E": [0x803d6048, 0x803d73a8, 0x803d7588],
             "P": [0x804159f0, 0x804159f0],
-            "J": [0x803a4518, 0x803ac448],
+            "J": [0x803ab2c8, 0x803ac448], # jp 0: 803ab2c8 old: 803a4518
             "K": [0x80446130]
         },
         "datatype": Datatype.VOIDPTR
@@ -337,14 +337,23 @@ watches = {
         },
         "datatype": Datatype.STRING
     },
-    "buttonsHeld" : {
+    "buttonsBUTHeld" : {
         "addresses" : {
-            "E": [0x804e5fb4, 0x804e7834, 0x804e79b4],
-            "P": [0x80528fb4, 0x80528fb4],
-            "J": [0x804bb2b4, 0x804bc8b4],
-            "K": [0x80560914]
+            "E": [0x804e5fb6, 0x804e7836, 0x804e79b6],
+            "P": [0x80528fb6, 0x80528fb6],
+            "J": [0x804bb2b6, 0x804bc8b6],
+            "K": [0x80560916]
         },
-        "datatype": Datatype.WORD
+        "datatype": Datatype.BYTE
+    },
+    "buttonsPADHeld" : {
+        "addresses" : {
+            "E": [0x804e5fb7, 0x804e7837, 0x804e79b7],
+            "P": [0x80528fb7, 0x80528fb7],
+            "J": [0x804bb2b7, 0x804bc8b7],
+            "K": [0x80560917]
+        },
+        "datatype": Datatype.BYTE
     },
     "seqLoadWork_state" : {
         "addresses" : {

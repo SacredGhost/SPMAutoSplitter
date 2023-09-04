@@ -18,6 +18,12 @@ if __name__ == "__main__":
     Enter6AgainSplit = config['Settings']['Enter6AgainSplit']
     Enter7AgainSplit = config['Settings']['Enter7AgainSplit']
     CountBleckSplit = config['Settings']['CountBleckSplit']
+
+    if CountBleckSplit == 'True':
+        CountBleckSplit = True
+    elif CountBleckSplit == 'False':
+        CountBleckSplit = False
+
     epitsplits = config['Settings']['ExtraPitSplits']
 
     print(f'{"[" + "Console" + "]":>15} SPM Auto Splitter [vBeta2]')
@@ -56,10 +62,6 @@ if __name__ == "__main__":
     PIT_MAPS = ("dan_01", "dan_02", "dan_03", "dan_04", "dan_41", "dan_42", "dan_43", "dan_44")
     PIT_10_MAPS = ("dan_21", "dan_22", "dan_23", "dan_24", "dan_30", "dan_61", "dan_62", "dan_63", "dan_64", "dan_70")
 
-    BTN_MASK_2 = 0x100
-    BTN_MASK_DOWN = 0x1
-    BTN_MASK_UP = 0x2
-    BTN_MASK_HOME = 0x8000
     RECIPE_BIT_MASK = 0x20
 
     EVT_ENTRY_SIZE = 0x1a8
@@ -86,10 +88,13 @@ if __name__ == "__main__":
     effcurcount = get_watch("EffTypeStats_curCount")
     textopacity1 = get_watch("text_opacity_1")
     textopacity2 = get_watch("text_opacity_2")
-    buttonsHeld = get_watch("buttonsHeld")
+    buttonsBUTHeld = get_watch("buttonsBUTHeld")
+    buttonsPADHeld = get_watch("buttonsPADHeld")
     seqLoadWork_state = get_watch('seqLoadWork_state')
     knownRecipe_Byte6 = get_watch("knownRecipesByte6")
     knownRecipe_Byte7 = get_watch("knownRecipesByte7")
+    buttonsBUTHeld = get_watch("buttonsBUTHeld")
+    buttonsPADHeld = get_watch("buttonsPADHeld")
 
     text_box_count1 = 0
     text_box_count2 = 0
@@ -111,6 +116,8 @@ if __name__ == "__main__":
     current_loadSeq = seqLoadWork_state.read()
     current_recipeByte6 = knownRecipe_Byte6.read()
     current_recipeByte7 = knownRecipe_Byte6.read() 
+    current_BUTbutton = buttonsBUTHeld.read()
+    current_PADbutton = buttonsPADHeld.read()
 
     def findInStructArray(arr: ByteArrayMemoryWatch, struct_size: int, offset: int, to_find: list[int], to_find_datatype: Datatype, callback: Callable[[int], Any]):
         for i in range(arr.size // struct_size):
@@ -142,11 +149,12 @@ if __name__ == "__main__":
                 print(f'{"[" + "Console" + "]":>15} GG :)')
 
         if script_ptr == PURE_HEART_EVT_SCRIPT:
-            print(f'{"[" + "Console" + "]":>15} Pure Heart Detected')
-            if current_map == "wa1_27":
-                do_split(ROCK_HEART_SPLIT_DELAY)
-            else:
-                do_split(PURE_HEART_SPLIT_DELAY)
+            if current_map != "mac_02":
+                print(f'{"[" + "Console" + "]":>15} Pure Heart Detected')
+                if current_map == "wa1_27":
+                    do_split(ROCK_HEART_SPLIT_DELAY)
+                else:
+                    do_split(PURE_HEART_SPLIT_DELAY)
         
         if script_ptr == RETURN_EVT_SCRIPT:
             print(f'{"[" + "Console" + "]":>15} Return Cutscene')
@@ -335,7 +343,7 @@ if __name__ == "__main__":
                     do_split(START_OR_CREDITS_DELAY)
                     hundo_sequence = 11
 
-    runstarted = False
+    runstarted = False # True = debug
 
     if runstarted == False:
         current_loadSeq = seqLoadWork_state.read()
@@ -350,15 +358,17 @@ if __name__ == "__main__":
     # Initial split
 
     while runstarted == False:
+        currentPADbutton = buttonsPADHeld.read()
+        currentBUTbutton = buttonsBUTHeld.read()
         print(f'{"[" + "Console" + "]":>15} Auto Splitter Ready! Please select your file.')
-
         while seqLoadWork_state.read() != 0x12d:
             time.sleep(1 / FPS)
         print(f'{"[" + "Console" + "]":>15} File select split detected.')
         print(f'{"[" + "Console" + "]":>15} Please wait a moment...')
         framewaitcount = 0
         while framewaitcount < FPS:
-            if buttonsHeld.read() & BTN_MASK_UP != 0 or buttonsHeld.read() & BTN_MASK_DOWN != 0 or buttonsHeld.read() & BTN_MASK_HOME != 0:
+            currentPADbutton = buttonsPADHeld.read()
+            if currentPADbutton != 0:
                 print(f'{"[" + "Console" + "]":>15} Split canceled, please go back to file select')
                 fileError = True
                 break
@@ -367,8 +377,10 @@ if __name__ == "__main__":
         if fileError == False:
             print(f'{"[" + "Console" + "]":>15} Ready! Press 2 to begin your run.')
             filestart = True
-            while buttonsHeld.read() & BTN_MASK_2 == 0:
-                while buttonsHeld.read() & BTN_MASK_UP != 0 or buttonsHeld.read() & BTN_MASK_DOWN != 0 or buttonsHeld.read() & BTN_MASK_HOME != 0:
+            while currentBUTbutton != 1:
+                currentPADbutton = buttonsPADHeld.read()
+                currentBUTbutton = buttonsBUTHeld.read()
+                while currentPADbutton != 0:
                     if errormessage == False:
                         print(f'{"[" + "Console" + "]":>15} Split canceled, please go back to file select')
                     errormessage = True
@@ -402,7 +414,7 @@ if __name__ == "__main__":
             if current_map == "ls4_11" and CountBleckSplit == True:
                 current_effcurcount = effcurcount.read()
 
-            findInStructArray(evt_entries, EVT_ENTRY_SIZE, EVT_ENTRY_SCRIPT_PTR_OFFSET, [STAR_BLOCK_EVT_SCRIPT, PURE_HEART_EVT_SCRIPT, DOOR_CLOSE_EVT_SCRIPT, RETURN_EVT_SCRIPT, CB_DEFEAT_EVT_SCRIPT, SD_DEFEAT_EVT_SCRIPT, CREDITS_START_SCRIPT, RETURN_PIPE_DELAY, DOWN_PIPE_EVT_SCRIPT, TOWN_DOOR_EVT_SCRIPT], Datatype.WORD, evt_entry_cb)
+            findInStructArray(evt_entries, EVT_ENTRY_SIZE, EVT_ENTRY_SCRIPT_PTR_OFFSET, [STAR_BLOCK_EVT_SCRIPT, PURE_HEART_EVT_SCRIPT, DOOR_CLOSE_EVT_SCRIPT, RETURN_EVT_SCRIPT, CB_DEFEAT_EVT_SCRIPT, SD_DEFEAT_EVT_SCRIPT, CREDITS_START_SCRIPT, RETURN_PIPE_SCRIPT, DOWN_PIPE_EVT_SCRIPT, TOWN_DOOR_EVT_SCRIPT], Datatype.WORD, evt_entry_cb)
 
             if hundo_sequence == 6:
                 current_recipeByte6 = knownRecipe_Byte6.read()
@@ -410,8 +422,6 @@ if __name__ == "__main__":
                 if binary_rep[5] == '1':
                     do_split(START_OR_CREDITS_DELAY)
                     hundo_sequence = 7
-                else:
-                    print(binary_rep, current_recipeByte6)
 
             if hundo_sequence == 7:
                 current_recipeByte7 = knownRecipe_Byte7.read()
@@ -419,8 +429,6 @@ if __name__ == "__main__":
                 if binary_rep[6] == '1':
                     do_split(START_OR_CREDITS_DELAY)
                     hundo_sequence = 8
-                else:
-                    print(binary_rep, current_recipeByte7)
         except RuntimeError as e: # If dolphin is disconnected, should not error for any other reason
             print(e)
             time.sleep(1)
