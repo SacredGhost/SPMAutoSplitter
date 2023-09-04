@@ -95,6 +95,7 @@ if __name__ == "__main__":
     knownRecipe_Byte7 = get_watch("knownRecipesByte7")
     buttonsBUTHeld = get_watch("buttonsBUTHeld")
     buttonsPADHeld = get_watch("buttonsPADHeld")
+    gsw1 = get_watch("GSW(1)")
 
     text_box_count1 = 0
     text_box_count2 = 0
@@ -103,6 +104,7 @@ if __name__ == "__main__":
     pit_run = False
     hundo_run = False
     hundo_sequence = 0
+    flopPit = 1
 
     extra_pit_splits = epitsplits
 
@@ -116,8 +118,9 @@ if __name__ == "__main__":
     current_loadSeq = seqLoadWork_state.read()
     current_recipeByte6 = knownRecipe_Byte6.read()
     current_recipeByte7 = knownRecipe_Byte6.read() 
-    current_BUTbutton = buttonsBUTHeld.read()
-    current_PADbutton = buttonsPADHeld.read()
+    currentBUTbutton = buttonsBUTHeld.read()
+    currentPADbutton = buttonsPADHeld.read()
+    currentGSW1 = gsw1.read()
 
     def findInStructArray(arr: ByteArrayMemoryWatch, struct_size: int, offset: int, to_find: list[int], to_find_datatype: Datatype, callback: Callable[[int], Any]):
         for i in range(arr.size // struct_size):
@@ -149,12 +152,11 @@ if __name__ == "__main__":
                 print(f'{"[" + "Console" + "]":>15} GG :)')
 
         if script_ptr == PURE_HEART_EVT_SCRIPT:
-            if current_map != "mac_02":
-                print(f'{"[" + "Console" + "]":>15} Pure Heart Detected')
-                if current_map == "wa1_27":
-                    do_split(ROCK_HEART_SPLIT_DELAY)
-                else:
-                    do_split(PURE_HEART_SPLIT_DELAY)
+            print(f'{"[" + "Console" + "]":>15} Pure Heart Detected')
+            if current_map == "wa1_27":
+                do_split(ROCK_HEART_SPLIT_DELAY)
+            else:
+                do_split(PURE_HEART_SPLIT_DELAY)
         
         if script_ptr == RETURN_EVT_SCRIPT:
             print(f'{"[" + "Console" + "]":>15} Return Cutscene')
@@ -162,41 +164,52 @@ if __name__ == "__main__":
 
         if script_ptr == DOOR_CLOSE_EVT_SCRIPT and (current_map in ANY_SPLIT_MAPS or current_map in PIT_MAPS or current_map in PIT_10_MAPS):
             marioposx = mariox.read()
+            currentGSW1 = gsw1.read()
 
             valid_door = True
             split_delay = DOOR_CLOSE_SPLIT_DELAY
             door_name = 'None'
 
-            if current_sequence == 9 and (-490 <= marioposx <= -410):
-                door_name = 'Chapter 1'
-            elif current_sequence == 65 and (-340 <= marioposx <= -260):
-                door_name = 'Chapter 2'
-            elif current_sequence == 100 and (-190 <= marioposx <= -110):
-                door_name = 'Chapter 3'
-            elif current_sequence == 134 and (-40 <= marioposx <= 40):
-                door_name = 'Chapter 4'
-            elif current_sequence == 178 and (110 <= marioposx <= 190):
-                door_name = 'Chapter 5'
-            elif 222 <= current_sequence <= 224 and (260 <= marioposx <= 340):
-                door_name = 'Chapter 6'
-            elif Enter6AgainSplit == True:
-                if current_sequence == 281 and (260 <= marioposx <= 340):
-                    door_name = 'Chapter 6-?'
-            elif Enter7AgainSplit == True:
-                if current_sequence == 303 and (410 <= marioposx <= 490):
-                    door_name = 'Chapter 7'
-            elif current_sequence in (356,357) and (-80 <= marioposx <= -80):
-                door_name = 'Chapter 8'
+            if current_map == "mac_02":
+                if current_sequence == 9 and (-490 <= marioposx <= -410):
+                    door_name = 'Chapter 1'
+                elif current_sequence == 65 and (-340 <= marioposx <= -260):
+                    door_name = 'Chapter 2'
+                elif current_sequence == 100 and (-190 <= marioposx <= -110):
+                    door_name = 'Chapter 3'
+                elif current_sequence == 134 and (-40 <= marioposx <= 40):
+                    door_name = 'Chapter 4'
+                elif current_sequence == 178 and (110 <= marioposx <= 190):
+                    door_name = 'Chapter 5'
+                elif 222 <= current_sequence <= 224 and (260 <= marioposx <= 340):
+                    door_name = 'Chapter 6'
+                elif Enter6AgainSplit == True:
+                    if current_sequence == 281 and (260 <= marioposx <= 340):
+                        door_name = 'Chapter 6-?'
+                elif Enter7AgainSplit == True:
+                    if current_sequence == 303 and (410 <= marioposx <= 490):
+                        door_name = 'Chapter 7'
+            if current_map == "mac_12":
+                if current_sequence in (356,357) and (-80 <= marioposx <= -80):
+                    door_name = 'Chapter 8'
             elif current_sequence == 409 and (1100 <= marioposx <= 1200):
                 door_name = 'Bleck'
                 split_delay = FADEOUT_DOOR_SPLIT_DELAY
             elif current_map in PIT_MAPS or current_map in PIT_10_MAPS:
                 if current_map in PIT_MAPS:
-                    if extra_pit_splits == True or hundo_run == True:
+                    if extra_pit_splits == True:
                         split_delay = FADEOUT_DOOR_SPLIT_DELAY
                         door_name = "Pit"
                     elif current_map in PIT_MAPS:
                         valid_door = False
+                    if currentGSW1 == 99:
+                        if current_map == "dan_04" or current_map == "dan_44":
+                            split_delay = FADEOUT_DOOR_SPLIT_DELAY
+                            door_name = "Room 99"
+                            if flopPit == 1:
+                                valid_door = False
+                            else:
+                                valid_door = True
                 if current_map in PIT_10_MAPS:
                     if current_map != "dan_30" or current_map != "dan_70":
                         if marioposx > 250:
@@ -293,13 +306,18 @@ if __name__ == "__main__":
                         print(f'{"[" + "Console" + "]":>15} All Pixls run detected')
                     print(f'{"[" + "Console" + "]":>15} Pipe split detected')
                     do_split(DOWN_PIPE_DELAY)
-                    if current_map == "dan_30" or current_map == "dan_70":
+                    if current_map == "dan_70" and flopPit == 1:
+                        flopPit = 2
+                    elif current_map == "dan_70" and flopPit == 2:
                         if hundo_run == False:
                             print(f'{"[" + "Console" + "]":>15} GG :)')
                         elif hundo_sequence == 1:
                             hundo_sequence = 2
                         elif hundo_sequence == 2:
                             hundo_sequence = 3
+                    elif current_map == "dan_30":
+                        if hundo_run == False or current_sequence <= 73:
+                            print(f'{"[" + "Console" + "]":>15} GG :)')
         
         if script_ptr == RETURN_PIPE_SCRIPT:
             if current_map == "mi1_07" and current_sequence == 73:
@@ -343,7 +361,7 @@ if __name__ == "__main__":
                     do_split(START_OR_CREDITS_DELAY)
                     hundo_sequence = 11
 
-    runstarted = False # True = debug
+    runstarted = True # True = debug
 
     if runstarted == False:
         current_loadSeq = seqLoadWork_state.read()

@@ -179,7 +179,7 @@ watches = {
         "addresses": {
             "E": [0x803cf298, 0x803d05f8, 0x803d0798],
             "P": [0x8040ec00, 0x8040ec00],
-            "J": [0x803a4518, 0x803a5698], #jp0: changed from 803ab2c8
+            "J": [0x803a4518, 0x803a5698],
             "K": [0x8043f340]
         },
         "datatype": Datatype.VOIDPTR
@@ -188,7 +188,7 @@ watches = {
         "addresses": {
             "E": [0x803d6048, 0x803d73a8, 0x803d7588],
             "P": [0x804159f0, 0x804159f0],
-            "J": [0x803ab2c8, 0x803ac448], # jp 0: 803ab2c8 old: 803a4518
+            "J": [0x803ab2c8, 0x803ac448],
             "K": [0x80446130]
         },
         "datatype": Datatype.VOIDPTR
@@ -381,6 +381,14 @@ watches = {
             "K": [0x80549632]
         },
         "datatype": Datatype.BYTE
+    },
+    "GSW(1)" : {
+        "addresses" : {
+            "E": [0x804e2a95, 0x804e4315, 0x804e4495],
+            "P": [0x80525a95, 0x80525a95],
+            "J": [0x804b7d95, 0x804b9395],
+            "K": [0x8055d3f5]
+        },
+        "datatype": Datatype.BYTE
     }
 }
-
