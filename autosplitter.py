@@ -133,6 +133,7 @@ if __name__ == "__main__":
                 callback(val)
 
     def evt_entry_cb(script_ptr: int):
+        global current_map
         global current_effcurcount
         global current_text_opacity_1
         global current_text_opacity_2
@@ -165,12 +166,14 @@ if __name__ == "__main__":
         if script_ptr == DOOR_CLOSE_EVT_SCRIPT and (current_map in ANY_SPLIT_MAPS or current_map in PIT_MAPS or current_map in PIT_10_MAPS):
             marioposx = mariox.read()
             currentGSW1 = gsw1.read()
+            current_map = map.read()
+            print(current_map)
 
             valid_door = True
             split_delay = DOOR_CLOSE_SPLIT_DELAY
             door_name = 'None'
 
-            if current_map == "mac_02":
+            if current_map == 'mac_02':
                 if current_sequence == 9 and (-490 <= marioposx <= -410):
                     door_name = 'Chapter 1'
                 elif current_sequence == 65 and (-340 <= marioposx <= -260):
@@ -189,7 +192,7 @@ if __name__ == "__main__":
                 elif Enter7AgainSplit == True:
                     if current_sequence == 303 and (410 <= marioposx <= 490):
                         door_name = 'Chapter 7'
-            if current_map == "mac_12":
+            elif current_map == "mac_12":
                 if current_sequence in (356,357) and (-80 <= marioposx <= -80):
                     door_name = 'Chapter 8'
             elif current_sequence == 409 and (1100 <= marioposx <= 1200):
@@ -202,7 +205,7 @@ if __name__ == "__main__":
                         door_name = "Pit"
                     elif current_map in PIT_MAPS:
                         valid_door = False
-                    if currentGSW1 == 99:
+                    if currentGSW1 == 99 and extra_pit_splits == False:
                         if current_map == "dan_04" or current_map == "dan_44":
                             split_delay = FADEOUT_DOOR_SPLIT_DELAY
                             door_name = "Room 99"
@@ -361,7 +364,7 @@ if __name__ == "__main__":
                     do_split(START_OR_CREDITS_DELAY)
                     hundo_sequence = 11
 
-    runstarted = False # True = debug
+    runstarted = True # True = debug
 
     if runstarted == False:
         current_loadSeq = seqLoadWork_state.read()
@@ -448,7 +451,7 @@ if __name__ == "__main__":
                     do_split(START_OR_CREDITS_DELAY)
                     hundo_sequence = 8
         except RuntimeError as e: # If dolphin is disconnected, should not error for any other reason
-            print(e)
+            print(f'{"[" + "Console" + "]":>15} {e}')
             time.sleep(1)
             print(f'{"[" + "Console" + "]":>15} Dolphin not detected, restarting...')
             time.sleep(3)
