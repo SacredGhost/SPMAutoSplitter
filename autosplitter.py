@@ -46,6 +46,7 @@ if __name__ == "__main__":
 
     FPS = get_watch("fps").read()
     SLEEP_TIME = 5 # DO NOT CHANGE
+    START_OR_CREDITS_DELAY = 0 # DO NOT CHANGE
     STAR_BLOCK_SPLIT_DELAY = 240 # Default: 240 frames
     PURE_HEART_SPLIT_DELAY = 727 # Default: 727 frames
     ROCK_HEART_SPLIT_DELAY = 721 # Default: 721 frames
@@ -54,8 +55,7 @@ if __name__ == "__main__":
     RETURN_SPLIT_DELAY = 426 # Default: 426 frames
     CB_DEFEAT_DELAY = 150 # Default: 150 frames
     SD_DEFEAT_DELAY = 40 # Default: 40 frames
-    START_OR_CREDITS_DELAY = 0 # DO NOT CHANGE
-    RETURN_PIPE_DELAY = 0 # find
+    RETURN_PIPE_DELAY = 282 # Default: 282
     DOWN_PIPE_DELAY = 156 # Default: 156 frames 
 
     ANY_SPLIT_MAPS = ("mac_02", "mac_12", "ls4_10")
@@ -186,10 +186,10 @@ if __name__ == "__main__":
                     door_name = 'Chapter 5'
                 elif 222 <= current_sequence <= 224 and (260 <= marioposx <= 340):
                     door_name = 'Chapter 6'
-                elif Enter6AgainSplit == True:
+                elif Enter6AgainSplit:
                     if current_sequence == 281 and (260 <= marioposx <= 340):
                         door_name = 'Chapter 6-?'
-                elif Enter7AgainSplit == True:
+                elif Enter7AgainSplit:
                     if current_sequence == 303 and (410 <= marioposx <= 490):
                         door_name = 'Chapter 7'
             elif current_map == "mac_12":
@@ -200,7 +200,7 @@ if __name__ == "__main__":
                 split_delay = FADEOUT_DOOR_SPLIT_DELAY
             elif current_map in PIT_MAPS or current_map in PIT_10_MAPS:
                 if current_map in PIT_MAPS:
-                    if extra_pit_splits == True:
+                    if extra_pit_splits:
                         split_delay = FADEOUT_DOOR_SPLIT_DELAY
                         door_name = "Pit"
                     elif current_map in PIT_MAPS:
@@ -228,7 +228,7 @@ if __name__ == "__main__":
                     print(f'{"[" + "Console" + "]":>15} 100% run detected')
                 else:
                     valid_door = False
-            elif hundo_run == True:
+            elif hundo_run:
                 if hundo_sequence == 0 and current_map == "mac_02":
                     if (-490 <= marioposx <= -410):
                         door_name = 'Enter Chapter 1'
@@ -248,7 +248,7 @@ if __name__ == "__main__":
                 do_split(split_delay)
 
         if script_ptr == CB_DEFEAT_EVT_SCRIPT:
-            if CountBleckSplit == True:
+            if CountBleckSplit:
                 print(f'{"[" + "Console" + "]":>15} Count Bleck Defeated')
                 frame_wait(FPS *2)
                 while current_effcurcount != 1:
@@ -304,7 +304,7 @@ if __name__ == "__main__":
                     valid_pipe = False
                 if current_map == "mac_15" and marioposx > -45:
                     valid_pipe = False
-                if valid_pipe == True:
+                if valid_pipe:
                     if sequence_position == 99:
                         print(f'{"[" + "Console" + "]":>15} All Pixls run detected')
                     print(f'{"[" + "Console" + "]":>15} Pipe split detected')
@@ -326,7 +326,7 @@ if __name__ == "__main__":
             if current_map == "mi1_07" and current_sequence == 73:
                 print(f'{"[" + "Console" + "]":>15} Pit% Return Pipe Detected')
                 do_split(RETURN_PIPE_DELAY)
-            elif hundo_run == True:
+            elif hundo_run:
                 current_map_p = current_map[:3]
                 if hundo_sequence == 3 and current_map_p == "gn2":
                     do_split(RETURN_PIPE_DELAY)
@@ -358,7 +358,7 @@ if __name__ == "__main__":
                 if marioposz > 1739:
                     valid_door = False
                 print(f'{"[" + "Console" + "]":>15} Valid Door: Card Shop Door Detected')
-                if valid_door == True:
+                if valid_door:
                     while marioposz < 1750:
                         marioposz = marioz.read()
                     do_split(START_OR_CREDITS_DELAY)
@@ -372,7 +372,7 @@ if __name__ == "__main__":
             errormessage = False
             print(f'{"[" + "Console" + "]":>15} Please go back to file select')
             errormessage = True
-            while errormessage == True and current_loadSeq > 10:
+            while errormessage and current_loadSeq > 10:
                 current_loadSeq = seqLoadWork_state.read()
         errormessage = False
 
@@ -408,7 +408,7 @@ if __name__ == "__main__":
                     filestart = False
                     break
                 time.sleep(1 / FPS)
-        if filestart == True and fileError == False:
+        if filestart and fileError == False:
             PressRelease(keyCodeMap[key_code], 100)
             print(f'{"[" + "Console" + "]":>15} Good Luck!')
             time.sleep(10)
@@ -423,7 +423,7 @@ if __name__ == "__main__":
                 if framewaitcount < FPS:
                     print(f'{"[" + "Console" + "]":>15} Please close the current textbox.')
                 errormessage = True
-                while errormessage == True and current_loadSeq > 10:
+                while errormessage and current_loadSeq > 10:
                     current_loadSeq = seqLoadWork_state.read()
             print(f'{"[" + "Console" + "]":>15} Please wait a moment...')
             time.sleep(3)
@@ -432,7 +432,7 @@ if __name__ == "__main__":
         try:
             current_map = map.read()
             current_sequence = sequence_position.read()
-            if current_map == "ls4_11" and CountBleckSplit == True:
+            if current_map == "ls4_11" and CountBleckSplit:
                 current_effcurcount = effcurcount.read()
 
             findInStructArray(evt_entries, EVT_ENTRY_SIZE, EVT_ENTRY_SCRIPT_PTR_OFFSET, [STAR_BLOCK_EVT_SCRIPT, PURE_HEART_EVT_SCRIPT, DOOR_CLOSE_EVT_SCRIPT, RETURN_EVT_SCRIPT, CB_DEFEAT_EVT_SCRIPT, SD_DEFEAT_EVT_SCRIPT, CREDITS_START_SCRIPT, RETURN_PIPE_SCRIPT, DOWN_PIPE_EVT_SCRIPT, TOWN_DOOR_EVT_SCRIPT], Datatype.WORD, evt_entry_cb)
