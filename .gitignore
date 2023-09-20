@@ -154,6 +154,7 @@ cython_debug/
 
 pyinstallercode.txt
 hundo_sequence_labels.txt
+python_to_c.txt
 
 
 # PyCharm
