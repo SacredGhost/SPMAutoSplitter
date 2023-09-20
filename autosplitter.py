@@ -55,7 +55,7 @@ if __name__ == "__main__":
     RETURN_SPLIT_DELAY = 426 # Default: 426 frames
     CB_DEFEAT_DELAY = 150 # Default: 150 frames
     SD_DEFEAT_DELAY = 40 # Default: 40 frames
-    RETURN_PIPE_DELAY = 282 # Default: 282
+    RETURN_PIPE_DELAY = 282 # Default: 282 frames
     DOWN_PIPE_DELAY = 156 # Default: 156 frames 
 
     ANY_SPLIT_MAPS = ("mac_02", "mac_12", "ls4_10")

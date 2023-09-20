@@ -22,7 +22,9 @@ NmFlash8 - NmFlash8
 
 ### To Do
 Add options to change when to split (CastleSR timing, etc) <br />
-Console Support (Wii U)
+Console Support (Wii U) <br />
+
+Will most likely be changed from Python to C/C++ sometime in the future for REL modding.
 
 ### For Developers: 
 Python 11 is not supported by dolphin memory engine. Must use Python 10.
