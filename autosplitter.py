@@ -43,7 +43,6 @@ if __name__ == "__main__":
     def msec_wait(delay):
         frame_wait(delay / 1000 * FPS)
 
-
     FPS = get_watch("fps").read()
     SLEEP_TIME = 5 # DO NOT CHANGE
     START_OR_CREDITS_DELAY = 0 # DO NOT CHANGE
@@ -167,7 +166,6 @@ if __name__ == "__main__":
             marioposx = mariox.read()
             currentGSW1 = gsw1.read()
             current_map = map.read()
-            print(current_map)
 
             valid_door = True
             split_delay = DOOR_CLOSE_SPLIT_DELAY
@@ -244,8 +242,9 @@ if __name__ == "__main__":
             else:
                 valid_door = False    
             if (valid_door):
-                print(f'{"[" + "Console" + "]":>15} Valid Door: {door_name} Door Detected')
-                do_split(split_delay)
+                if door_name != None:
+                    print(f'{"[" + "Console" + "]":>15} Valid Door: {door_name} Door Detected')
+                    do_split(split_delay)
 
         if script_ptr == CB_DEFEAT_EVT_SCRIPT:
             if CountBleckSplit:
